@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import userEvent from '@testing-library/user-event';
-import type { Model, Param } from './types';
+
 import { render, screen } from '@testing-library/react';
-import { ParamEditor } from './ParamEditor';
+import { ParamEditor, type Model, type Param } from './ParamEditor';
 
 describe('ParamEditor: getModel()', () => {
   it('returns next Model after user edits values', async () => {

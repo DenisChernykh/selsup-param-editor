@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import type { Model, Param } from './types';
-import { ParamEditor } from './ParamEditor';
+import { ParamEditor, type Model, type Param } from './ParamEditor';
 import { render, screen } from '@testing-library/react';
 
 describe('ParamEditor: initialization', () => {

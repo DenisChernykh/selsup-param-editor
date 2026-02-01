@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import type { Param } from './param-editor/types';
-import { ParamEditor } from './param-editor/ParamEditor';
+
+import { ParamEditor, type Param } from './param-editor/ParamEditor';
 
 const demoParams: Param[] = [
   { id: 1, name: 'Назначание', type: 'string' },
