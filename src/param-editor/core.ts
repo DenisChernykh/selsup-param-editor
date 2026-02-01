@@ -26,11 +26,11 @@ export function buildInitialValuesByParamId(
 export function applyParamValueChange(
   previousValues: ValuesByParamId,
   paramId: number,
-  nextValues: string,
+  nextValue: string,
 ): ValuesByParamId {
   return {
     ...previousValues,
-    [paramId]: nextValues,
+    [paramId]: nextValue,
   };
 }
 
