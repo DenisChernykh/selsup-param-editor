@@ -1,73 +1,126 @@
-# React + TypeScript + Vite
+# Тестовое задание «Редактор параметров» (React + TypeScript)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Описание
 
-Currently, two official plugins are available:
+Реализован компонент **ParamEditor**, который позволяет редактировать значения параметров товара на основе:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- списка параметров `params: Param[]` (схема полей)
+- начальной модели `model: Model` (значения параметров в `model.paramValues`)
 
-## React Compiler
+Требования задания соблюдены:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- поддерживается только текстовый тип параметра: `type: 'string'` (рендерится `<input />`)
+- **все параметры** из `params` отображаются сразу и доступны для редактирования
+- значения корректно инициализируются из `model.paramValues`
+- публичный метод `getModel()` возвращает **полную** структуру `Model` со всеми проставленными значениями
+- добавлены unit-тесты (Vitest + React Testing Library) на:
+  1. отображение полей по `params`
+  2. инициализацию из `model.paramValues`
+  3. корректность результата `getModel()` после изменений
 
-## Expanding the ESLint configuration
+Основная реализация находится в одном файле:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/param-editor/ParamEditor.tsx`
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Технологии
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- React
+- TypeScript
+- Vite
+- Vitest
+- React Testing Library
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Установка и запуск (pnpm)
+
+### Установка зависимостей
+
+```
+pnpm i
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Запуск dev-сервера
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```
+pnpm dev
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Запуск unit-тестов
+
+```
+pnpm test
+```
+
+## Как пользоваться ParamEditor
+
+Компонент — классовый (как в примере ТЗ) и предоставляет публичный метод `getModel()`.
+Самый простой способ получить модель — через `ref`.
+
+Пример:
+
+```tsx
+import React from 'react';
+import {
+  ParamEditor,
+  type Model,
+  type Param,
+} from './param-editor/ParamEditor';
+
+const params: Param[] = [
+  { id: 1, name: 'Назначение', type: 'string' },
+  { id: 2, name: 'Длина', type: 'string' },
+];
+
+const model: Model = {
+  paramValues: [
+    { paramId: 1, value: 'повседневное' },
+    { paramId: 2, value: 'макси' },
+  ],
+  colors: [],
+};
+
+export function App() {
+  const editorRef = React.useRef<ParamEditor>(null);
+
+  const handleGetModel = () => {
+    const nextModel = editorRef.current?.getModel();
+    console.log(nextModel);
+  };
+
+  return (
+    <div>
+      <ParamEditor ref={editorRef} params={params} model={model} />
+      <button onClick={handleGetModel}>getModel()</button>
+    </div>
+  );
+}
+```
+
+## Тесты
+
+Тесты находятся в папке `src/param-editor` и покрывают основные требования автопроверки:
+
+- `ParamEditor.render.test.tsx`
+- `ParamEditor.init.test.tsx`
+- `ParamEditor.getModel.test.tsx`
+
+### Вывод тестов
+
+```
+➜  selsup git:(feat/param-editor) pnpm test
+
+> selsup@0.0.0 test /Users/denischernykh/projects/test-task/selsup
+> vitest
+
+
+ DEV  v4.0.18 /Users/denischernykh/projects/test-task/selsup
+
+ ✓ src/smoke.test.ts (1 test) 1ms
+ ✓ src/param-editor/ParamEditor.render.test.tsx (1 test) 51ms
+ ✓ src/param-editor/ParamEditor.init.test.tsx (1 test) 59ms
+ ✓ src/param-editor/ParamEditor.getModel.test.tsx (1 test) 163ms
+
+ Test Files  4 passed (4)
+      Tests  4 passed (4)
+   Start at  18:11:32
+   Duration  1.13s (transform 165ms, setup 329ms, import 538ms, tests 274ms, environment 2.27s)
 ```
