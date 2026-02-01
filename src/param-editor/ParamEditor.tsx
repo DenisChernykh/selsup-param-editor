@@ -12,7 +12,7 @@ export type ParamEditorState = {
   valuesByParamId: ValuesByParamId;
 };
 
-export class ParamEditoor extends React.Component<
+export class ParamEditor extends React.Component<
   ParamEditorProps,
   ParamEditorState
 > {

@@ -7,11 +7,11 @@ export type ParamValueEditorProps<TParam extends Param = Param> = {
   inputId: string;
 };
 
-export const StringParamInput: React.FC<ParamValueEditorProps<StringParam>> = ({
+export function StringParamInput({
   value,
   onValueChange,
   inputId,
-}) => {
+}: ParamValueEditorProps<StringParam>) {
   return (
     <input
       id={inputId}
@@ -27,7 +27,7 @@ export const StringParamInput: React.FC<ParamValueEditorProps<StringParam>> = ({
       }}
     />
   );
-};
+}
 
 function buildParamInputId(paramId: number): string {
   return `param-${paramId}`;
@@ -62,11 +62,7 @@ export type ParamFieldProps = {
   onValueChange: (nextValue: string) => void;
 };
 
-export const ParamField: React.FC<ParamFieldProps> = ({
-  param,
-  value,
-  onValueChange,
-}) => {
+export function ParamField({ param, value, onValueChange }: ParamFieldProps) {
   const inputId = buildParamInputId(param.id);
   return (
     <div
@@ -84,4 +80,4 @@ export const ParamField: React.FC<ParamFieldProps> = ({
       {renderParamEditor(param, value, onValueChange, inputId)}
     </div>
   );
-};
+}
